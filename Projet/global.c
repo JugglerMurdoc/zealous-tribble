@@ -6,11 +6,15 @@ void read_file(char * file_name){
 	printf("ERROR : couldn't open file : %s\n", file_name);
 	}
   else{
-    
+    int i;
     char line[256];
 
-    while (fgets(line, sizeof(line), file)) {
-         printf("%s", line); 
+    while (fgets(line, sizeof(line), file) && i < SAMPLE) {
+		 trace_line ex_line;
+         ex_line = extract_line(line);
+         print_line(ex_line);
+         printf("----------------\n");
+         i++;
     }
     fclose(file);
 }
