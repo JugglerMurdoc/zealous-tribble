@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "trace_line.h"
+#include "tracer.h"
 
-#define SAMPLE 10
+#define SAMPLE 100000
 
 struct global_stats {
 	int destr_p;
@@ -15,5 +16,11 @@ struct global_stats {
 typedef struct global_stats global_stats;
 
 void read_file(char * file_name);
+
+global_stats run_through(FILE* file);
+global_stats init_stats();
+
+
+void trace_global_stats(trace_line line, global_stats* stats);
 
 #endif

@@ -6,4 +6,4 @@ set border lc rgb 'black'
 set key tc rgb 'black'
 set linetype 1 lc rgb 'black'
 
-plot for [i=1:1000] "light_trace.txt" 1:using (i)
+plot "traces/total_waiting.tr" using 1:2 with lines title 'Queue current size' lt rgb "blue" lw 2

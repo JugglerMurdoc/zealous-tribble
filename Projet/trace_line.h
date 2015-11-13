@@ -2,8 +2,8 @@
 #define TRACE_LINE_FILE
 #include <stdlib.h>
 #include <stdio.h>
-#include "global.h"
 #include <string.h>
+#include "global.h"
 
 typedef enum {DEP_SOURCE, ARR_INT, DEP_FILE, ARR_DEST, DEST} packet_type;
 

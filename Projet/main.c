@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trace_line.h"
+#include "tracer.h"
 
 int main (int argc, char* argv[]) {
 	char * file_name;
