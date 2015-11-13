@@ -19,6 +19,6 @@ typedef struct trace_line trace_line;
 
 trace_line extract_line(char* line);
 
-trace_line new_line();
+trace_line new_line(char* time,	char* code,char* p_id,char* f_id,char* tos,char* bif,char* src_n,char* dest_n,char* pos_n);
 
 #endif
