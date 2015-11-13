@@ -19,7 +19,7 @@ global_stats run_through(FILE* file){
     char line[256];
 	global_stats stats;
     FILE* total_waiting_file = fopen(TOTAL_WAITING_PACKETS_FILE, "w");
-	while (fgets(line, sizeof(line), file) /*&& i < SAMPLE*/) {
+	while (fgets(line, sizeof(line), file)  i < SAMPLE*) {
 		 trace_line ex_line;
          ex_line = extract_line(line);
          

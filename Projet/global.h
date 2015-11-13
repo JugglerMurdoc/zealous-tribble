@@ -5,7 +5,7 @@
 #include "trace_line.h"
 #include "tracer.h"
 
-#define SAMPLE 100000
+#define SAMPLE 1000000
 
 struct global_stats {
 	int destr_p;
