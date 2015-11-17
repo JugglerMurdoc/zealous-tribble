@@ -20,7 +20,6 @@ trace_line extract_line(char* line){
 	src_n = strtok(NULL, " ");
 	dest_n = strtok(NULL, " ");
 	pos_n = strtok(NULL, " ");
-	
 	return new_line(time,code,p_id,f_id,src_n,dest_n,pos_n);
 }
 

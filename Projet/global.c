@@ -5,12 +5,15 @@ global_stats init_stats(){
 	stats.destr_p = 0;
 	stats.diff_p = 0;
 	stats.diff_f = 0;
-	
+	return stats;
 }
 	
 void trace_global_stats(trace_line line, global_stats* stats){
 	if(line.p_type == DEST){
 		stats->destr_p++;
+	}
+	if(line.p_type == DEP_SOURCE){
+		stats-> diff_p ++;
 	}
 }
 	
@@ -42,7 +45,8 @@ void read_file(char * file_name){
 	}
   else{
 		stats = run_through(file);
-		printf("DESTRUCTIONS : %d\n",stats.destr_p);
+		printf("DESTRUCTIONS       : %-7d\n",stats.destr_p);
+		printf("PAQUETS DIFFERENTS : %-7d\n",stats.diff_p);
     }
 }	
 	

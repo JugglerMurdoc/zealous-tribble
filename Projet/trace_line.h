@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "global.h"
+#include <time.h>
 
 typedef enum {DEP_SOURCE, ARR_INT, DEP_FILE, ARR_DEST, DEST} packet_type;
 
