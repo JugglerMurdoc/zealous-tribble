@@ -2,7 +2,6 @@
 
 
 trace_line extract_line(char* line){
-	char* buf;
 	char* time;
 	char* code;
 	char* p_id;
@@ -15,8 +14,6 @@ trace_line extract_line(char* line){
 	code = strtok(NULL, " ");
 	p_id = strtok(NULL, " ");
 	f_id = strtok(NULL, " ");
-	buf  = strtok(NULL, " ");
-	buf  = (strcmp(code,"4"))?strtok(NULL, " "):"0";
 	src_n = strtok(NULL, " ");
 	dest_n = strtok(NULL, " ");
 	pos_n = strtok(NULL, " ");

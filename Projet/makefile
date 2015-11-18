@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-W -Wall -ansi
+CFLAGS=-W -Wall -ansi -g
 LDFLAGS=
 EXEC=read
 

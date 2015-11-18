@@ -7,12 +7,19 @@ NODE  new_list(int value){
 	return new_node;
 }
 
-NODE add_id(NODE list, int value){
+NODE add_flow_id(NODE list, int value, global_stats* stats){
 	NODE tmp = list;
 	NODE new_cell = new_list(value);
 	
+	/*Cas où la liste ne contient qu'un élément*/
+	
+	/*On ne rejoute rien si l'élément est déjà là*/
 	if(list -> next == NULL){
-			if(new_cell-> val < list -> val){
+			if(tmp -> val == new_cell -> val){
+			return list;
+	}
+	else{
+		if(new_cell-> val < list -> val){
 				new_cell -> next = list;
 				return new_cell;
 			}
@@ -20,29 +27,38 @@ NODE add_id(NODE list, int value){
 				list -> next = new_cell;
 				return list;
 			}
+		}
 	}
 	
 	
 	while(tmp -> next != NULL && (tmp -> next->val) <= value){
 			tmp = tmp -> next;
-	}
+			}
 	
 	if(tmp -> next != NULL){
 		new_cell -> next = tmp -> next;
 	}
 	else{
 		tmp -> next = new_cell;
+		stats->diff_f++;
 		return list;
 	}
-	
-	if(tmp -> val < new_cell -> val){
-		tmp->next = new_cell;
-		return list;
-	}else{
-		new_cell->next = tmp;
-		return new_cell;
+	if(tmp -> val == new_cell -> val){
+			return list;
+	}
+	else{
+		if(tmp -> val < new_cell -> val){
+			stats->diff_f++;
+			tmp->next = new_cell;
+			return list;
+		}else{
+			new_cell->next = tmp;
+			stats->diff_f++;
+			return new_cell;
 	}
 }
+}
+
 void print_list(NODE list)
 {
 	NODE tmp = list;
@@ -51,6 +67,24 @@ void print_list(NODE list)
 			tmp = tmp -> next;
 	}
 	printf("| %-8d\n", tmp->val);
+}
+
+void remove_list(NODE list){
+	if(list -> next != NULL){
+		remove_list(list->next);
+	}	
+	free(list);
+}
+
+void trace_total_flows_amount(trace_line ex_line, global_stats* stats){
+	int flow_id = ex_line.f_id;
+	if(stats->diff_f == 0){
+			stats->flow_ids_list->val = flow_id;
+			stats->diff_f++;
+	}else{
+	stats -> flow_ids_list = add_flow_id(stats->flow_ids_list,flow_id,stats);
+	}
+	
 }
 
 /*
