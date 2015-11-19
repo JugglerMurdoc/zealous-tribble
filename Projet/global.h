@@ -1,7 +1,9 @@
 #ifndef GLOBAL_FILE
 #define GLOBAL_FILE
+#include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "trace_line.h"
 #include "tracer.h"
 #include "trace_ids.h"

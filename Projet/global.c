@@ -24,13 +24,13 @@ global_stats run_through(FILE* file){
     char line[256];
 	global_stats stats = init_stats();
     FILE* total_waiting_file = fopen(TOTAL_WAITING_PACKETS_FILE, "w");
-	while (fgets(line, sizeof(line), file)  && i < SAMPLE) {
+	while (fgets(line, sizeof(line), file)  /*&& i < SAMPLE*/) {
 		 trace_line ex_line;
          ex_line = extract_line(line);
          
          trace_total_waiting_packets(ex_line,total_waiting_file);	         
          trace_global_stats(ex_line, &stats);
-         trace_total_flows_amount(ex_line, &stats);
+         /*trace_total_flows_amount(ex_line, &stats);*/
          
          i++;
     }
