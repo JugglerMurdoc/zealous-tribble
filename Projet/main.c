@@ -15,14 +15,14 @@ int main (int argc, char* argv[]) {
 
 	clock_t begin, end;
 	double time_spent;
-
+	int trace_routers = 0;
 	char * file_name = NULL;
 	int flow_value = 0;
 	int c;
 	
 	opterr = 0;
 
-	while ((c = getopt (argc, argv, "F:f:hs")) != -1)
+	while ((c = getopt (argc, argv, "F:f:hsR")) != -1)
     switch (c)
       {
 	  /*F : number of flows*/	  
@@ -36,6 +36,9 @@ int main (int argc, char* argv[]) {
        case 'f':
         printf("filename : %s\n",optarg);
         file_name = optarg;
+        break;
+        case 'R':
+        trace_routers = 1;
         break;
       /*h : print help*/
       case 'h':
@@ -64,7 +67,7 @@ int main (int argc, char* argv[]) {
 
 	
 	begin = clock();
-	read_file(file_name,flow_value);
+	read_file(file_name,flow_value,trace_routers);
 	
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;

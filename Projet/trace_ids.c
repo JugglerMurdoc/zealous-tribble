@@ -70,7 +70,7 @@ void print_list(NODE list)
 }
 
 void remove_list(NODE list){
-	if(list -> next != NULL){
+	if(list != NULL && list -> next != NULL){
 		remove_list(list->next);
 	}	
 	free(list);

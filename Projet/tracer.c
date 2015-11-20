@@ -29,5 +29,11 @@ void trace_total_waiting_packets(trace_line line, FILE* total_waiting_file){
 		 }
 	}
 }
-	
+
+void trace_routers_charge(trace_line line,int* routers){
+	if(line.p_type == ARR_INT || line.p_type == ARR_DEST){
+			int result = routers[line.n_src-1] + 1;
+			routers[line.n_src-1] = result;		
+	}	
+}
 	

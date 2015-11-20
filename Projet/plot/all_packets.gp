@@ -1,4 +1,4 @@
-set output 'result.png'
+set output 'total_packets.png'
 set terminal pngcairo background rgb 'white' size 1600,900
 set xlabel 'time' tc rgb 'black'
 set ylabel 'packet' tc rgb 'black'

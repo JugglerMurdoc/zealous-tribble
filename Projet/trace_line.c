@@ -9,11 +9,14 @@ trace_line extract_line(char* line){
 	char* src_n;
 	char* dest_n;
 	char* pos_n;
-
+	char *buf;
 	time = strtok(line, " ");
 	code = strtok(NULL, " ");
 	p_id = strtok(NULL, " ");
 	f_id = strtok(NULL, " ");
+	strtok(NULL, " ");
+	if(atoi(code) != 4)
+	{strtok(NULL, " ");}
 	src_n = strtok(NULL, " ");
 	dest_n = strtok(NULL, " ");
 	pos_n = strtok(NULL, " ");
@@ -32,7 +35,6 @@ trace_line new_line(char* time,	char* p_type,char* p_id,char* f_id,char* src_n,c
 	result.n_src = get_node_index(src_n);
 	result.n_dest = get_node_index(dest_n);
 	result.n_pos = get_node_index(pos_n);
-	
 	return result;
 }
 
