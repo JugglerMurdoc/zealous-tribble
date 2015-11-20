@@ -22,7 +22,7 @@ int main (int argc, char* argv[]) {
 	
 	opterr = 0;
 
-	while ((c = getopt (argc, argv, "F:f:hs")) != -1)
+	while ((c = getopt (argc, argv, "Ff:hs")) != -1)
     switch (c)
       {
 	  /*F : number of flows*/	  

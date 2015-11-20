@@ -30,9 +30,7 @@ global_stats run_through(FILE* file,int flow_id){
          
          trace_total_waiting_packets(ex_line,total_waiting_file);	         
          trace_global_stats(ex_line, &stats);
-	 if(flow_id == -1){
-		trace_total_flows_amount(ex_line, &stats);
-	 }
+         /*trace_total_flows_amount(ex_line, &stats);*/
          
          i++;
     }

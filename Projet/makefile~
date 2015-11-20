@@ -6,7 +6,7 @@ EXEC=read
 all: $(EXEC)
 
 read: global.o main.o trace_line.o tracer.o trace_ids.o
-	$(CC) -o $@ $^ $(LDFLAGS) -lm
+	$(CC) -o $@ $^ $(LDFLAGS)  -lm
 
 main.o: global.h trace_line.h tracer.h trace_ids.h
 

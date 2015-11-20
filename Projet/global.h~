@@ -24,7 +24,7 @@ typedef struct global_stats global_stats;
 
 void read_file(char * file_name,int flow_id);
 
-global_stats run_through(FILE* file, int flow_id);
+global_stats run_through(FILE* file);
 global_stats init_stats();
 
 
