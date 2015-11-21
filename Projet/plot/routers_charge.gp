@@ -7,4 +7,4 @@ set key tc rgb 'black'
 set linetype 1 lc rgb 'black'
 set boxwidth 1
 
-plot "traces/routers_traces.tr" using 1:2 with boxes title 'Packets per router' 
+plot "traces/routers_traces.tr" using 1:2 with boxes title 'Packets in transition per router' 

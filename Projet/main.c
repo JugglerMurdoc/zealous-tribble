@@ -6,7 +6,12 @@
 #include "trace_ids.h"
 
 void print_help(){
-		printf("\nOptions :\n\n-F <flow_id>/'all' : traces the given flow id or, if the option 'all' is used, traces the NUMBER of different flows\n-f : the name of the file to parse\n-h : get help!\n\n");
+		printf("\nOptions :\n\n-F <flow_id>/'all' : traces the given \
+flow id or, if the option 'all' is used, traces the NUMBER of different \
+flows\n-f : the name of the file to parse\n-h : get help! \
+\n-r <router_id>/'all' : traces the given \
+router or, if the option 'all' is used, traces the NUMBER of total packets \
+transiting through each router.\n\n");
 			 }
 
 
@@ -15,14 +20,14 @@ int main (int argc, char* argv[]) {
 
 	clock_t begin, end;
 	double time_spent;
-	int trace_routers = 0;
+	int trace_routers = -1;
 	char * file_name = NULL;
 	int flow_value = 0;
 	int c;
 	
 	opterr = 0;
 
-	while ((c = getopt (argc, argv, "F:f:hsR")) != -1)
+	while ((c = getopt (argc, argv, "F:f:hsr:")) != -1)
     switch (c)
       {
 	  /*F : number of flows*/	  
@@ -37,8 +42,12 @@ int main (int argc, char* argv[]) {
         printf("filename : %s\n",optarg);
         file_name = optarg;
         break;
-        case 'R':
-        trace_routers = 1;
+        case 'r':
+        if(strcmp(optarg,"all") == 0){
+        flow_value = 0;
+		}else{	
+			trace_routers = atoi(optarg);
+		}
         break;
       /*h : print help*/
       case 'h':

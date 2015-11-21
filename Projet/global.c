@@ -23,9 +23,9 @@ global_stats init_stats(){
 	stats.diff_p = 0;
 	stats.diff_f = 0;
 	stats.flow_ids_list = new_list(-1);
-	stats.routeurs = (int*)malloc(ROUTERS_NB*sizeof(int));
+	stats.routers = (int*)malloc(ROUTERS_NB*sizeof(int));
 	for(i = 0; i < ROUTERS_NB; i++){
-		stats.routeurs[i] = 0;
+		stats.routers[i] = 0;
 	}
 	return stats;
 }
@@ -53,8 +53,8 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag){
 	 if(flow_id == -1){
 		trace_total_flows_amount(ex_line, &stats);
 	 }
-	 if(trace_routers_flag == 1){
-		 trace_routers_charge(ex_line,stats.routeurs);
+	 if(trace_routers_flag != -1){
+		 trace_routers_charge(ex_line,&stats,trace_routers_flag);
 	 }
          
          i++;
@@ -75,16 +75,16 @@ void read_file(char * file_name,int flow_id,int trace_routers_flag){
 		stats = run_through(file,flow_id,trace_routers_flag);
 		printf("DESTRUCTIONS       : %-7d\n",stats.destr_p);
 		printf("PAQUETS DIFFERENTS : %-7d\n",stats.diff_p);
-		system("gnuplot < plot/all_packets.gp && mv total_packets.png ./png &");
+		
+		system("gnuplot < plot/all_packets.gp && mv total_packets.png ./png");
 		if(flow_id == -1){printf("FLUX DIFFERENTS : %-7d\n",stats.diff_f);}
 		
-		if(trace_routers_flag == 1){
+		if(trace_routers_flag == 0){
 			printf("Charge routeurs :\n ");
-			print_routeurs_charge(stats.routeurs);
-			system("gnuplot < plot/routers_charge.gp && mv routers.png ./png &");
+			system("gnuplot < plot/routers_charge.gp && mv routers.png ./png && display ./png/routers.png ");
 		}
 		
-		/*remove_list(stats.flow_ids_list);*/
+		remove_list(stats.flow_ids_list);
     }
 }
 	

@@ -9,7 +9,6 @@ trace_line extract_line(char* line){
 	char* src_n;
 	char* dest_n;
 	char* pos_n;
-	char *buf;
 	time = strtok(line, " ");
 	code = strtok(NULL, " ");
 	p_id = strtok(NULL, " ");

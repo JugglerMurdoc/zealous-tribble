@@ -19,7 +19,7 @@ struct global_stats {
 	int diff_p;
 	int diff_f;
 	NODE flow_ids_list;
-	int* routeurs;
+	int* routers;
 };
 
 typedef struct global_stats global_stats;
