@@ -20,7 +20,7 @@ int main (int argc, char* argv[]) {
 
 	clock_t begin, end;
 	double time_spent;
-	int trace_routers = -1;
+	int trace_routers = -2;
 	char * file_name = NULL;
 	int flow_value = 0;
 	int c;
@@ -44,7 +44,7 @@ int main (int argc, char* argv[]) {
         break;
         case 'r':
         if(strcmp(optarg,"all") == 0){
-        flow_value = 0;
+        trace_routers = -1;
 		}else{	
 			trace_routers = atoi(optarg);
 		}

@@ -7,7 +7,6 @@ void print_routeurs_charge(int* routeurs)
 			FILE* routeurs_file = fopen(ROUTERS_CHARGE_FILE, "w");
 			int i;
 			for( i = 0; i < ROUTERS_NB; i++){
-				printf("%-1d  |",routeurs[i]);
 				char buffer [50];
 				sprintf(buffer,"%d %d\n", i, routeurs[i]);
 				fputs(buffer,routeurs_file);
@@ -44,6 +43,7 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag){
     char line[256];
 	global_stats stats = init_stats();
     FILE* total_waiting_file = fopen(TOTAL_WAITING_PACKETS_FILE, "w");
+    FILE* router_file = (trace_routers_flag <= -1)?NULL:get_router_trace(trace_routers_flag);	
 	while (fgets(line, sizeof(line), file)  /*&& i < SAMPLE*/) {
 		 trace_line ex_line;
          ex_line = extract_line(line);
@@ -53,13 +53,14 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag){
 	 if(flow_id == -1){
 		trace_total_flows_amount(ex_line, &stats);
 	 }
-	 if(trace_routers_flag != -1){
-		 trace_routers_charge(ex_line,&stats,trace_routers_flag);
+	 if(trace_routers_flag != -2){
+		 trace_routers_charge(ex_line,&stats,trace_routers_flag, router_file);
 	 }
          
          i++;
     }
     fclose(file);
+    if(router_file != NULL) {fclose(router_file);}
     
     return stats;
 }
@@ -75,13 +76,18 @@ void read_file(char * file_name,int flow_id,int trace_routers_flag){
 		stats = run_through(file,flow_id,trace_routers_flag);
 		printf("DESTRUCTIONS       : %-7d\n",stats.destr_p);
 		printf("PAQUETS DIFFERENTS : %-7d\n",stats.diff_p);
-		
-		system("gnuplot < plot/all_packets.gp && mv total_packets.png ./png");
 		if(flow_id == -1){printf("FLUX DIFFERENTS : %-7d\n",stats.diff_f);}
 		
-		if(trace_routers_flag == 0){
-			printf("Charge routeurs :\n ");
+		if(trace_routers_flag == -1){
+			print_routeurs_charge(stats.routers);
 			system("gnuplot < plot/routers_charge.gp && mv routers.png ./png && display ./png/routers.png ");
+		}
+		else{
+			if(trace_routers_flag != -2){
+				char buf[256];
+				sprintf(buf,"gnuplot < plot/one_router.gp && mv router%d.png png/ && display png/router%d.png",trace_routers_flag,trace_routers_flag);
+				system(buf);
+			}
 		}
 		
 		remove_list(stats.flow_ids_list);
