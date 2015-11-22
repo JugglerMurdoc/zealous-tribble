@@ -21,6 +21,8 @@ typedef struct Node* NODE;
 NODE  new_list(int value);
 
 NODE add_flow_id(NODE list, int value, global_stats* stats);
+
+NODE rm_id(NODE list, int value);
 	
 void print_list(NODE list);		
 

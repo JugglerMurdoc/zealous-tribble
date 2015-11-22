@@ -31,7 +31,7 @@ int main (int argc, char* argv[]) {
 	while ((c = getopt (argc, argv, "F:f:hsr:p:")) != -1)
     switch (c)
       {
-	  /*F : number of flows*/	  
+	  /*F : number of flows*/
       case 'F':
 			if(strcmp(optarg,"all") == 0){
 				flow_value = -1;
@@ -82,7 +82,9 @@ int main (int argc, char* argv[]) {
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	time_spent = truncate(time_spent);
 	printf("Time spent : %0.1f second(s)\n",time_spent);
-
+	
+	
+	
 	
         return 0; 
 }

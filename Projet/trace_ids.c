@@ -40,7 +40,9 @@ NODE add_flow_id(NODE list, int value, global_stats* stats){
 	}
 	else{
 		tmp -> next = new_cell;
-		stats->diff_f++;
+		if(stats != NULL){
+			stats->diff_f++;
+		}
 		return list;
 	}
 	if(tmp -> val == new_cell -> val){
@@ -48,12 +50,18 @@ NODE add_flow_id(NODE list, int value, global_stats* stats){
 	}
 	else{
 		if(tmp -> val < new_cell -> val){
+			
+		if(stats != NULL){
 			stats->diff_f++;
+		}
 			tmp->next = new_cell;
 			return list;
 		}else{
 			new_cell->next = tmp;
+			
+		if(stats != NULL){
 			stats->diff_f++;
+		}
 			return new_cell;
 	}
 }
@@ -61,6 +69,7 @@ NODE add_flow_id(NODE list, int value, global_stats* stats){
 
 void print_list(NODE list)
 {
+	if(list != NULL){
 	NODE tmp = list;
 	while(tmp -> next != NULL){
 			printf("| %-8d", tmp->val);
@@ -68,6 +77,8 @@ void print_list(NODE list)
 	}
 	printf("| %-8d\n", tmp->val);
 }
+}
+
 
 void remove_list(NODE list){
 	if(list != NULL && list -> next != NULL){
@@ -87,50 +98,29 @@ void trace_total_flows_amount(trace_line ex_line, global_stats* stats){
 	
 }
 
-/*
-//FILE * create_and_open_trace_file(char* file_name){
-		//char buffer [50];
-		//sprintf(buffer,"touch %s\n", file_name);
-		//int return_value = system(buffer);
-		//return fopen(buffer,"r+");
-//}
-
-//void remove_trace(char * file_name){
-		//char buffer [50];
-		//sprintf(buffer,"rm %s\n", file_name);
-		//system(buffer);
-//}
-
-//void trace_flow_and_packets_ids(struct trace_line line,struct  global_stats* stats,struct  Node * flows_list,struct Node * packets_list ){
-	//int new_f_id = line.f_id;
-	//int new_p_id = line.p_id;
-	
-	//insert_and_increment_if_new(new_f_id,&(stats->diff_f),flows_list);
-	//insert_and_increment_if_new(new_p_id,&(stats->diff_p),packets_list);	
-//}
-
-//void insert_and_increment_if_new(int element, int * stats, struct Node* list){
-	//if(find_int(element, list) == 0){
-		//(*stats)++;
-	//}
-	//else{
-		//InsertAtTail(element,list);
-	//}	
-//}
-
-//void insert_id(int id, FILE* trace_file){
-	//char line[256];
-	//int spot_founded = 0;
-	
-	//while (fgets(line, sizeof(line), trace_file)
-			//&& (spot_founded == 0)) {
-		 
-		 //int extracted_id = atoi(line);
-		 //if(id < extracted_id){
-			 
-			 
-			//}	
-		 
-		//}
-	
-//} */
+NODE rm_id(NODE list, int value){
+	NODE tmp = list;
+	if(tmp->val == value){
+		tmp = tmp -> next;
+		free(list);
+		return tmp;
+	}
+	else{
+		while(tmp->next != NULL && tmp->next->val != value){
+			tmp = tmp -> next;
+		}		
+		
+		if(tmp -> next == NULL){
+			if(tmp->val == value){
+				free(tmp);
+			}
+			return list;
+		}else{
+			NODE tmp2 = tmp -> next;
+			tmp -> next = tmp -> next -> next;
+			free(tmp2);
+			return list;
+		}		
+		
+	}
+}
