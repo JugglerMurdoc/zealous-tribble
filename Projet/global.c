@@ -45,6 +45,10 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 	int i;
     char line[256];
 	global_stats stats = init_stats();
+	flow_stats f_stats;
+	if(flow_id > -1){
+		f_stats = init_flow_stats(flow_id);
+	}
     FILE* total_waiting_file = fopen(TOTAL_WAITING_PACKETS_FILE, "w");
     FILE* router_file = (trace_routers_flag <= -1)?NULL:get_router_trace(trace_routers_flag);	
 	while (fgets(line, sizeof(line), file)  /*&& i < SAMPLE*/) {
@@ -56,6 +60,11 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 	 if(flow_id == -1){
 		trace_total_flows_amount(ex_line, &stats);
 	 }
+		else{
+			if(flow_id > -1){
+				trace_flow(ex_line,&f_stats);
+			}
+		}
 	 if(packet_id != -1){
 		 int result = trace_packet(ex_line,packet_id);
 		 if(result == -1){
@@ -70,7 +79,9 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
     }
     fclose(file);
     if(router_file != NULL) {fclose(router_file);}
-    
+    if(flow_id > -1){
+		print_flow_stats(f_stats);		
+	}
     return stats;
 }
 
@@ -100,6 +111,7 @@ void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id
 		}
 		
 		remove_list(stats.flow_ids_list);
+		printf("\n");
     }
 }
 	

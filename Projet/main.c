@@ -23,7 +23,7 @@ int main (int argc, char* argv[]) {
 	int trace_routers = -2;
 	int trace_packet = -1;
 	char * file_name = NULL;
-	int flow_value = 0;
+	int flow_value = -2;
 	int c;
 	
 	opterr = 0;

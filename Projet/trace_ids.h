@@ -30,12 +30,4 @@ void remove_list(NODE list);
 
 void trace_total_flows_amount(trace_line ex_line, global_stats* stats);
 
-/*
-//~ FILE * create_and_open_trace_file(char* file_name);
-//~ void remove_trace(char * file_name);
-//~ 
-//~ void insert_id(int id, FILE* trace_file);
-//~ 
-//~ void trace_flow_and_packets_ids(struct trace_line line,struct  global_stats* stats,Node flows_list, Node packets_list );*/
-
 #endif

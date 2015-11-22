@@ -131,4 +131,47 @@ int trace_packet(trace_line ex_line,int packet_id){
 	
 }
 
+flow_stats init_flow_stats(int flow_id){
+		flow_stats result;
+		result.id = flow_id;
+		result.destr_p = 0;
+		result.diff_p = 0;
+		result.begin_time = -1.0;
+		return result;
+}
+
+void print_flow_stats(flow_stats f_stats){
+	int not_found = ((f_stats.diff_p == 0) && (f_stats.destr_p == 0));
+	printf("\n======================\n");
+	printf("FLOW N°%d\n",f_stats.id);
+	printf("======================\n");
+	if(not_found){
+	printf("NOT FOUND\n");
+	}else{
+	float rate = (((float)f_stats.diff_p) / (((float)f_stats.diff_p)+((float)f_stats.destr_p))) * 100.0;
+	printf("Arrived   packets : %d\n",f_stats.diff_p);
+	printf("Destroyed packets : %d\n",f_stats.destr_p);	
+	printf("Success rate      : %0.2f\%\n",	rate);
+	printf("Start time  	  : %0.4f\n",f_stats.begin_time);
+	printf("End time    	  : %0.4f\n",f_stats.end_time);
+	printf("Duration          : %0.4f\n",f_stats.end_time - f_stats.begin_time);
+	}
+	printf("======================\n\n");
+}
 	
+void trace_flow(trace_line line, flow_stats* stats){
+	if(stats->id == line.f_id){
+		if(stats->begin_time < 0){
+			stats->begin_time = line.time;
+		}
+		if(line.p_type == DEST){
+			stats->destr_p++;
+			stats->end_time = line.time;
+		}
+		if(line.p_type == ARR_DEST){
+			stats->diff_p++;
+			stats->end_time = line.time;
+		}
+		
+	}
+}
