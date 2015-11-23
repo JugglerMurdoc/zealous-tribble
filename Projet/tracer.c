@@ -154,7 +154,7 @@ void print_flow_stats(flow_stats f_stats){
 	printf("Loss rate         : %0.2f%%\n",rate);
 	printf("Start time  	  : %0.4f\n",f_stats.begin_time);
 	printf("End time    	  : %0.4f\n",f_stats.end_time);
-	printf("Duration          : %0.4f\n",f_stats.end_time - f_stats.begin_time);
+	printf("Duration          : %0.4fs\n",f_stats.end_time - f_stats.begin_time);
 	}
 	printf("======================\n\n");
 }
