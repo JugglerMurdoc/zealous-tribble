@@ -20,13 +20,14 @@ struct global_stats {
 	int diff_f;
 	NODE flow_ids_list;
 	int** routers;
+	int* end_to_end_charge;
 };
 
 typedef struct global_stats global_stats;
 
-void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id);
+void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id,int link_id);
 
-global_stats run_through(FILE* file, int flow_id,int trace_routers_flag,int packet_id);
+global_stats run_through(FILE* file, int flow_id,int trace_routers_flag,int packet_id,int link_id);
 global_stats init_stats();
 void print_routeurs_charge(int** routeurs);
 

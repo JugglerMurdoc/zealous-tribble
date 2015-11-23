@@ -4,13 +4,42 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
 #include "global.h"
 #include "trace_line.h"
+#include "tracer.h"
+#include "trace_ids.h"
+
+typedef struct global_stats global_stats;
+typedef struct trace_line trace_line;
+
+typedef struct global_stats global_stats;
+
+struct Node2 {
+	int id;
+	float begin;
+	float end;
+	struct Node2 * next;
+};
+
+typedef struct Node2* NODE2;
+
+	struct links_charge {
+	int diff_p;
+	float total_time;
+	NODE2 p_list; 	
+};
+
+typedef struct links_charge links_charge;
+
+NODE2  new_p_list(int value,float begin);
+
+NODE2 add_p(links_charge link, int id, float begin);
+
+NODE2 rm_p(links_charge* link, int id, float end);
 
 void increment_matching_link(int* links_tab,int tab_size, int index1, int index2);
-void print_tab(int* tab,int nb_routers);
-
+void write_end_to_end_charge(int* tab,int nb_routers);
+void trace_end_to_end_charge(trace_line ex_line,global_stats* stats);
 
 
 #endif

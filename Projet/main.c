@@ -25,13 +25,19 @@ int main (int argc, char* argv[]) {
 	int trace_packet = -1;
 	char * file_name = NULL;
 	int flow_value = -2;
+	int link_id = -2;
 	int c;
 	
 	opterr = 0;
 
-	while ((c = getopt (argc, argv, "F:f:hsr:p:")) != -1)
+	while ((c = getopt (argc, argv, "F:f:hsr:p:l:")) != -1)
     switch (c)
       {
+	  case 'l':
+			if(strcmp(optarg,"all") == 0){
+				link_id = -1;
+			}
+			break;
 	  case 'F':
 			if(strcmp(optarg,"all") == 0){
 				flow_value = -1;
@@ -75,7 +81,7 @@ int main (int argc, char* argv[]) {
 
 	
 	begin = clock();
-	read_file(file_name,flow_value,trace_routers, trace_packet);
+	read_file(file_name,flow_value,trace_routers, trace_packet,link_id);
 	
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;

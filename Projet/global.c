@@ -29,6 +29,12 @@ global_stats init_stats(){
 		stats.routers[i][j] = 0;
 		}
 	}
+	int nb_links = ((ROUTERS_NB* (ROUTERS_NB -1))/2);
+	stats.end_to_end_charge = (int*)malloc( nb_links * sizeof(int*));
+	for(i = 0; i < nb_links; i++){
+		stats.end_to_end_charge[i] = 0;
+	}
+	
 	return stats;
 }
 	
@@ -41,7 +47,7 @@ void trace_global_stats(trace_line line, global_stats* stats){
 	}
 }
 	
-global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int packet_id){
+global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int packet_id,int link_id){
 	int i;
     char line[256];
 	global_stats stats = init_stats();
@@ -74,6 +80,10 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 	 if(trace_routers_flag != -2){
 		 trace_routers_charge(ex_line,&stats,trace_routers_flag, router_file);
 	 }
+	 if(link_id == -1){
+		 trace_end_to_end_charge(ex_line,&stats);
+		 
+	 }
          
          i++;
     }
@@ -86,14 +96,14 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 }
 
 
-void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id){
+void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id,int link_id){
   FILE* file = fopen(file_name, "r");
   global_stats stats;
   if(file == NULL){
 	printf("ERROR : couldn't open file : %s\n", file_name);
 	}
   else{
-		stats = run_through(file,flow_id,trace_routers_flag,packet_id);
+		stats = run_through(file,flow_id,trace_routers_flag,packet_id,link_id);
 		printf("Destructions lues       : %-7d\n",stats.destr_p);
 		printf("Paquets differents lus : %-7d\n",stats.diff_p);
 		if(flow_id == -1){printf("FLUX DIFFERENTS : %-7d\n",stats.diff_f);}
