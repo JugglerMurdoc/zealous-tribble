@@ -9,7 +9,7 @@
 #include "trace_line.h"
 
 void increment_matching_link(int* links_tab,int tab_size, int index1, int index2);
-void print_link(int* tab, int index);
+void print_tab(int* tab,int nb_routers);
 
 
 
