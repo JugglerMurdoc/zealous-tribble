@@ -39,7 +39,9 @@ NODE2 add_p(links_charge link, int id, float begin){
 	NODE2 tmp = link.p_list;
 	NODE2 new_cell = new_p_list(id,begin);
 	NODE2 list = link.p_list;
-	
+	if(list == NULL){
+		return new_cell;		
+	}
 	/*Cas où la liste ne contient qu'un élément*/
 	
 	/*On ne rajoute rien si l'élément est déjà là*/
@@ -87,7 +89,8 @@ NODE2 add_p(links_charge link, int id, float begin){
 
 NODE2 rm_p(links_charge* link, int id, float end){
 	NODE2 list = link->p_list;
-	NODE2 tmp;
+	NODE2 tmp = list;
+	/*Premier élément de la liste à supprimer*/
 	if(list->id == id){
 		tmp = list -> next;
 		float time_span = list -> begin - end;
@@ -96,11 +99,12 @@ NODE2 rm_p(links_charge* link, int id, float end){
 		free(list);
 		return tmp;
 	}
+	
 	else{
 		while(tmp->next != NULL && tmp->next->id != id){
 			tmp = tmp -> next;
 		}		
-		
+		/*Dernier élément de la liste PEUT-ETRE a supprimer*/
 		if(tmp -> next == NULL){
 			if(tmp->id == id){
 				float time_span = tmp -> begin - end;
@@ -109,6 +113,7 @@ NODE2 rm_p(links_charge* link, int id, float end){
 				free(tmp);
 			}
 			return list;
+		/*Element de milieu de liste concerné*/
 		}else{
 			NODE2 tmp2 = tmp -> next;
 			tmp -> next = tmp -> next -> next;			
@@ -119,6 +124,21 @@ NODE2 rm_p(links_charge* link, int id, float end){
 			return list;
 		}		
 		
+	}
+}
+
+void print_link_charge(NODE2 list)
+{
+	if(list != NULL){
+	NODE2 tmp = list;
+	while(tmp -> next != NULL){
+			printf("| %d ", tmp->id,tmp->begin);
+			tmp = tmp -> next;
+	}
+	printf("| %d \n", tmp->id,tmp->begin);
+}
+	else{
+		printf("\n");
 	}
 }
 

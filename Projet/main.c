@@ -4,6 +4,7 @@
 #include "trace_line.h"
 #include "tracer.h"
 #include "trace_ids.h"
+#include "links_tracer.h"
 
 void print_help(){
 		printf("\nOptions :\n\n-F <flow_id>/'all' : traces the given \
@@ -17,8 +18,6 @@ transiting through each router.\n\n");
 
 
 int main (int argc, char* argv[]) {
-
-
 	clock_t begin, end;
 	double time_spent;
 	int trace_routers = -2;

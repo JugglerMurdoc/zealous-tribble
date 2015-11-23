@@ -37,6 +37,8 @@ NODE2 add_p(links_charge link, int id, float begin);
 
 NODE2 rm_p(links_charge* link, int id, float end);
 
+void print_link_charge(NODE2 list);
+
 void increment_matching_link(int* links_tab,int tab_size, int index1, int index2);
 void write_end_to_end_charge(int* tab,int nb_routers);
 void trace_end_to_end_charge(trace_line ex_line,global_stats* stats);
