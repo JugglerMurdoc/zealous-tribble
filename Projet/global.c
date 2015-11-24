@@ -15,7 +15,7 @@ void print_routeurs_charge(int** routeurs)
 			printf("\n");	
 }
 
-global_stats init_stats(){
+global_stats init_stats(int links_flag){
 	global_stats stats;
 	int i,j;
 	stats.destr_p = 0;
@@ -29,10 +29,15 @@ global_stats init_stats(){
 		stats.routers[i][j] = 0;
 		}
 	}
+	if(links_flag){
 	int nb_links = ((ROUTERS_NB* (ROUTERS_NB -1))/2);
-	stats.end_to_end_charge = (int*)malloc( nb_links * sizeof(int*));
+	stats.nb_links = nb_links;
+	stats.end_to_end_charge = (links_charge*)malloc( nb_links * sizeof(links_charge));
 	for(i = 0; i < nb_links; i++){
-		stats.end_to_end_charge[i] = 0;
+		stats.end_to_end_charge[i].diff_p = 0;
+		stats.end_to_end_charge[i].total_time = 0.0;
+		stats.end_to_end_charge[i].p_list = NULL;
+	}
 	}
 	
 	return stats;
@@ -49,8 +54,10 @@ void trace_global_stats(trace_line line, global_stats* stats){
 	
 global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int packet_id,int link_id){
 	int i;
+	float percent =  (STEP_SIZE_PERCENT/100.0);
+	float step_size = percent * NB_LINES;
     char line[256];
-	global_stats stats = init_stats();
+    global_stats stats = init_stats(link_id);
 	flow_stats f_stats;
 	if(flow_id > -1){
 		f_stats = init_flow_stats(flow_id);
@@ -86,7 +93,13 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 	 }
          
          i++;
+         if(i % ((int)step_size) == 0){
+			 			 float progress = ((float)i)/((float)NB_LINES)*100.0;
+			 			 printf("\n%0.0f%% ...",progress);
+		 }
+    
     }
+    printf("\n");
     fclose(file);
     if(router_file != NULL) {fclose(router_file);}
     if(flow_id > -1){
@@ -118,6 +131,9 @@ void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id
 				sprintf(buf,"gnuplot < plot/one_router.gp && mv router%d.png png/ && display png/router%d.png",trace_routers_flag,trace_routers_flag);
 				system(buf);
 			}
+		}
+		if(link_id == -1){
+			write_end_to_end_charge(stats);
 		}
 		
 		remove_list(stats.flow_ids_list);

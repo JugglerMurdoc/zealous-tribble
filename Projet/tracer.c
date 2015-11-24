@@ -35,7 +35,7 @@ void trace_total_waiting_packets(trace_line line, FILE* total_waiting_file){
 			 }else{
 			 char buffer [50];
 			 sprintf(buffer,"%f %d\n", new_time, current_queue_size);
-			 fputs(buffer,total_waiting_file);
+			 /*fputs(buffer,total_waiting_file);*/
 			 current_queue_size = 0;
 			 precedent_time = new_time;
 		 }

@@ -1,37 +1,50 @@
 #include "links_tracer.h"
 
-void increment_matching_link(int* links_tab,int tab_size, int index1, int index2){
+int get_hash(int index1, int index2){
 		int x = (index1 > index2)?index2:index1;
 		int y = (index1 > index2)?index1:index2;
 		
 		int abscisse = (y * (y+1))/2;
 		int index = abscisse + x;
 		
-		if(index < tab_size){
-			links_tab[index] = 	links_tab[index] + 1;
-		}
-		else{
-			printf("Index out of bounds : %d in %d\n",index, tab_size);
-		}
+		return index;
 }
 
-void write_end_to_end_charge(int* tab,int nb_routers){
+void write_end_to_end_charge(global_stats stats){
 			int i,j;
 			int index = 0;
 			int line_size = 0;
 			
-			for(i = 0; i < nb_routers ; i++){
+			
+			
+			for(i = 0; i < ROUTERS_NB ; i++){
 				for(j = 0; j <= line_size; j++){
-					printf(" %-2d |",tab[index]);
+					links_charge link = stats.end_to_end_charge[index];
+					if(link.diff_p > 0){
+					printf("[%-2d --> %-2d] %-7d packets\n",i,j,link.diff_p);
+					}
 					index++;
 				}			
-				printf("\n");
 				line_size++;
 			}
 }
 
 void trace_end_to_end_charge(trace_line ex_line,global_stats* stats){
-	
+	int src = ex_line.n_src;
+	int  dest = ex_line.n_dest;
+	if((ex_line.p_type == DEP_SOURCE ||  ex_line.p_type == DEST || ex_line.p_type == ARR_DEST)){
+		int index = get_hash(src-1,dest-1);
+		links_charge* link = &(stats->end_to_end_charge[index]);
+		if(ex_line.p_type == DEP_SOURCE){
+		
+		link->diff_p++;
+		link->p_list = add_p(*link,ex_line.p_id,ex_line.time);}
+		else{
+			if(ex_line.p_type == DEST || ex_line.p_type == ARR_DEST){
+				link->p_list = rm_p(link,ex_line.p_id,ex_line.time);
+			}
+		}
+	}
 	
 }
 
@@ -39,7 +52,7 @@ NODE2 add_p(links_charge link, int id, float begin){
 	NODE2 tmp = link.p_list;
 	NODE2 new_cell = new_p_list(id,begin);
 	NODE2 list = link.p_list;
-	if(list == NULL){
+	if(tmp == NULL){
 		return new_cell;		
 	}
 	/*Cas où la liste ne contient qu'un élément*/
@@ -132,10 +145,10 @@ void print_link_charge(NODE2 list)
 	if(list != NULL){
 	NODE2 tmp = list;
 	while(tmp -> next != NULL){
-			printf("| %d ", tmp->id,tmp->begin);
+			printf("| %d ", tmp->id);
 			tmp = tmp -> next;
 	}
-	printf("| %d \n", tmp->id,tmp->begin);
+	printf("| %d \n", tmp->id);
 }
 	else{
 		printf("\n");

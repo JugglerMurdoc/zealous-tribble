@@ -10,6 +10,7 @@
 typedef struct global_stats global_stats;
 typedef struct trace_line trace_line;
 typedef struct Node* NODE;
+typedef struct links_charge links_charge;
 
 struct flow_stats {
 	int id;
