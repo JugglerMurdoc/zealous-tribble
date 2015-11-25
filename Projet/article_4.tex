@@ -1,0 +1,137 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Arsclassica Article
+% LaTeX Template
+% Version 1.1 (10/6/14)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Lorenzo Pantieri (http://www.lorenzopantieri.net) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+10pt, % Main document font size
+a4paper, % Paper type, use 'letterpaper' for US Letter paper
+oneside, % One page layout (no page indentation)
+%twoside, % Two page layout (page indentation for binding and different headers)
+headinclude,footinclude, % Extra spacing for the header and footer
+BCOR5mm, % Binding correction
+]{scrartcl}
+
+\input{structure.tex} % Include the structure.tex file which specified the document structure and layout
+
+\hyphenation{Fortran hy-phen-ation} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
+
+%----------------------------------------------------------------------------------------
+%	TITLE AND AUTHOR(S)
+%----------------------------------------------------------------------------------------
+
+\title{\normalfont{Conception d'un outil d'analyse et analyse de la trace d'un réseau en C}} % The article title
+
+\author{\spacedlowsmallcaps{Thibaut EHLINGER}} % The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
+
+\date{Mercredi 27 novembre 2015} % An optional date to appear under the author(s)
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	HEADERS
+%----------------------------------------------------------------------------------------
+
+\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}} % The header for all pages (oneside) or for even pages (twoside)
+%\renewcommand{\subsectionmark}[1]{\markright{\thesubsection~#1}} % Uncomment when using the twoside option - this modifies the header on odd pages
+\lehead{\mbox{\llap{\small\thepage\kern1em\color{halfgray} \vline}\color{halfgray}\hspace{0.5em}\rightmark\hfil}} % The header style
+
+\pagestyle{scrheadings} % Enable the headers specified in this block
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS & LISTS OF FIGURES AND TABLES
+%----------------------------------------------------------------------------------------
+
+\maketitle % Print the title/author/date block
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\section*{Abstract} % This section will not appear in the table of contents due to the star (\section*)
+Ce rapport présente la conception en C d'un utilitaire permettant l'analyse d'un fichier trace d'un réseau fonctionnant pour un certain format de fichier indépendemment de sa taille.
+
+Il y figure aussi quelques pistes concernant les résultats trouvés lors de l'analyse d'un fichier de trafique spécifique fourni par notre encadrant. 
+%----------------------------------------------------------------------------------------
+
+\newpage % Start the article content on the second page, remove this if you have a longer abstract that goes onto the second page
+
+%----------------------------------------------------------------------------------------
+%	EXERCICE 1
+%----------------------------------------------------------------------------------------
+
+\section{Fonctionnalités implémentées - Manuel d'utilisation}
+Le sujet du projet était volontairement assez vague, nous laissant le choix dans les fonctionnalités à implémenter. Il était probablement très dur d'implémenter toutes les fonctionnalités demandées, j'ai donc choisi d'implémenter celles "de base" bien sûr.
+
+Puis j'ai implémenté celles qui m'intéressaient, dans le sens où elles me donneraient une plus grande visibilité sur le réseau ayant produit la trace. Il est en effet impossible de visualiser un réseau de cette ampleur à partir d'une simple trace.
+\subsection{Utilisation générale}
+	Pour utiliser l'exécutable, il faut forcément l'appeler avec l'option \textit{-f} suivie du nom du fichier à parser, suivies des éventuelles options d'utilisation.
+	
+	Exemple :
+	
+	 \centerline{\texttt{\$./trace -f trace2650.txt -p all}}
+
+\subsection{Options}
+	Voici les statistiques globales qui sont traitées dans ce projet ainsi qu'un manuel d'utilisation. Toutes les options sont compatibles. Mais ne peuvent-être appelées qu'une fois par exécution. Il n'est donc pas possible de tracer un seul flux et de compter les flux lors d'une seule exécution, par exemple.
+	
+
+
+\subsubsection{\texttt{-f <Nom de fichier>}}
+  Indispensable pour préciser le fichier à parser.	
+
+\subsubsection{\texttt{-h}}
+Affiche une aide d'utilisation
+
+\subsubsection{\texttt{-F all/N(entier)}}
+\begin{itemize}
+  \item \textbf{\texttt{all} : }
+compte le nombre de flux donnés dans le fichier.\newline \textbf{\texttt{attention} : compter 3 minutes d'exécution}
+  \item \textbf{\texttt{N}} (entier) : trace le flux appelé ayant N pour identifiant.
+  \item Exemples :\newline\texttt{\$./trace -f trace2650.txt -F all}\newline\texttt{\$./trace -f trace2650.txt -F 2342}
+\end{itemize}
+\subsubsection{\texttt{-p N(entier)}}
+\begin{itemize}
+  \item \textbf{\texttt{N}} (entier) : trace le paquet appelé ayant N pour identifiant.
+  \item Exemple :\newline\texttt{\$./trace -f trace2650.txt -p 2342}
+\end{itemize}
+
+\subsubsection{\texttt{-r all/N(entier)}}
+\begin{itemize}
+  \item \textbf{\texttt{all}} : affiche le nombre de paquets reçus par chacun des noeuds du réseau.
+  \item \textbf{\texttt{N}} (entier) : trace un échantillonnage du nombre de paquets reçus chaque seconde par un routeur. Cette trace est placée dans le dossier \texttt{traces/} et porte le nom de trace\_routeur\textit{N}.tr. On peut ensuite modifier le fichier \texttt{one\_router.gp} pour générer un graphique de cette trace.
+  \item Exemples :\newline\texttt{\$./trace -r trace2650.txt -F all}\newline\texttt{\$./trace -r trace2650.txt -F 4}
+\end{itemize}
+  
+\subsubsection{\texttt{-l all}}
+\begin{itemize}
+  \item \textbf{\texttt{all}} : Affiche un bilan des communication de bout en bout, pour les paires de routeurs ayant communiqué. \newline De plus, créé une trace du nombre de paquets ayant circulé avec succès entre ces routeurs dans \texttt{traces/trace\_delay.tr}
+  \item Exemple :\newline\texttt{\$./trace -r trace2650.txt -l all}
+\end{itemize}
+
+
+\section{Choix de conceptions}
+Le fichier fourni est volumineux puisqu'il pèse plus de 140Mo. De plus, l'utilitaire conçu doit-être conçu pour des fichiers bien plus volumineux que celui-ci, pouvant dépasser le Go. 
+
+Aussi chaque choix de conception influe directement sur la vitesse d'éxécution ainsi que par le volume de mémoire vive monopolisé par celui-ci.
+
+
+\end{document}

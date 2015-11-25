@@ -7,12 +7,26 @@
 #include "links_tracer.h"
 
 void print_help(){
-		printf("\nOptions :\n\n-F <flow_id>/'all' : traces the given \
+		printf("\n\n\nOptions :\n\n\
+-f                   : the name of the file to parse\n\
+-h                   : get help! \
+\n\
+-F <flow_id>/'all'   : traces the given \
 flow id or, if the option 'all' is used, traces the NUMBER of different \
-flows\n-f : the name of the file to parse\n-h : get help! \
-\n-r <router_id>/'all' : traces the given \
+flows\
+\n\
+-l 'all'             : traces all the end to end communications of the traces. \
+\n\
+-h                   : get help!\
+\n\
+-p <flow_id>/'all'   : traces the given \
+packet id or, if the option 'all' is used, traces the NUMBER of different \
+packets\
+\n\
+-r <router_id>/'all' : traces the given \
 router or, if the option 'all' is used, traces the NUMBER of total packets \
-transiting through each router.\n\n");
+transiting through each router.\
+\n\n\n");
 			 }
 
 

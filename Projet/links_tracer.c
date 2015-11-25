@@ -16,10 +16,7 @@ void write_end_to_end_charge(global_stats stats){
 			int line_size = 0;
 			FILE* end_to_end_delay_file = fopen(END_TO_END_DELAY_FILE,"w");
 			char line[50];
-			char line2[100];
 			int total_packets = 0;
-			char xtics[8192];
-			strcpy(xtics,"set xtics (");
 			for(i = 0; i < ROUTERS_NB ; i++){
 				for(j = 0; j < line_size; j++){
 					links_charge link = stats.end_to_end_charge[index];
@@ -29,8 +26,6 @@ void write_end_to_end_charge(global_stats stats){
 					double mean_delay = (link.total_time / ((double)link.diff_p))*1000.0;
 					printf("%d[%-2d --> %-2d] %-9d packets (%-4d detruits) Total time : %-15lf Mean delay : %lfms\n",index,i,j,link.diff_p,link.diff_d,link.total_time,mean_delay);
 					sprintf(line,"%d %lf\n",graph_index,mean_delay);
-					sprintf(line2,"\"%-2d<->%-2d\" %d,",i,j,graph_index);
-					strcat(xtics,line2);
 					fputs(line,end_to_end_delay_file);
 					}
 					index++;
@@ -38,7 +33,6 @@ void write_end_to_end_charge(global_stats stats){
 				line_size++;
 			}
 			fclose(end_to_end_delay_file);
-			printf("%s\n",xtics);
 		
 			
 }

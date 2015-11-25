@@ -65,7 +65,7 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 	}
     FILE* total_waiting_file = fopen(TOTAL_WAITING_PACKETS_FILE, "w");
     FILE* router_file = (trace_routers_flag <= -1)?NULL:get_router_trace(trace_routers_flag);	
-	while (fgets(line, sizeof(line), file)  /*&& i < SAMPLE*/) {
+	while (fgets(line, sizeof(line), file) /* && i < SAMPLE*/) {
 		 trace_line ex_line;
          ex_line = extract_line(line);
          
@@ -120,18 +120,14 @@ void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id
 		stats = run_through(file,flow_id,trace_routers_flag,packet_id,link_id);
 		printf("Destructions lues       : %-7d\n",stats.destr_p);
 		printf("Paquets differents lus : %-7d\n",stats.diff_p);
-		if(flow_id == -1){printf("FLUX DIFFERENTS : %-7d\n",stats.diff_f);}
+		if(flow_id == -1){printf("FLUX DIFFERENTS : %-7d\n",stats.diff_f);
+							}
 		
 		if(trace_routers_flag == -1){
 			print_routeurs_charge(stats.routers);
 			system("gnuplot < plot/routers_charge.gp && mv routers.png ./png && display ./png/routers.png ");
 		}
 		else{
-			if(trace_routers_flag != -2){
-				char buf[256];
-				sprintf(buf,"gnuplot < plot/one_router.gp && mv router%d.png png/ && display png/router%d.png",trace_routers_flag,trace_routers_flag);
-				system(buf);
-			}
 		}
 		if(link_id == -1){
 			write_end_to_end_charge(stats);
