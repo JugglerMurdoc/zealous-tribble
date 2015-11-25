@@ -22,23 +22,44 @@ FILE * get_router_trace(int router_id){
 	return one_router_charge_trace;			
 }	
 
-void trace_total_waiting_packets(trace_line line, FILE* total_waiting_file){
+void trace_total_waiting_packets(trace_line line, FILE* total_waiting_file,FILE* total_destroyed_file){
+	
 	static float precedent_time = 0;
 	static int current_queue_size = 0;
+	static int destroyed_size = 0;
 		if(total_waiting_file == NULL){
 			printf("ERROR : Couldn't open trace file\n");	
 		}
 		else{
+			 if(line.p_type == DEP_SOURCE || line.p_type == ARR_DEST || line.p_type == DEST ){
 			 float new_time = truncate(line.time);
 			 if(new_time == precedent_time){
-				 current_queue_size++;
+				 if(line.p_type == DEP_SOURCE){
+					 current_queue_size++;
+				 }else{
+				 if(line.p_type == DEP_SOURCE){
+					destroyed_size++;
+					}
+				 else{
+					 
+				  current_queue_size--;
+				 }
+				 }
 			 }else{
+			if(new_time == 2.0){
+				printf("yo\n");
+			}
 			 char buffer [50];
-			 sprintf(buffer,"%f %d\n", new_time, current_queue_size);
-			 /*fputs(buffer,total_waiting_file);*/
+			 char buffer2 [50];
+			 int test = (current_queue_size > 0)?current_queue_size:0;
+			 sprintf(buffer,"%f %d\n", new_time, test);
+			 fputs(buffer,total_waiting_file);
+			 sprintf(buffer2,"%f %d\n", new_time, destroyed_size);
+			 fputs(buffer2,total_destroyed_file);
 			 current_queue_size = 0;
 			 precedent_time = new_time;
 		 }
+		}
 	}
 }
 

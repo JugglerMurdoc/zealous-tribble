@@ -40,7 +40,7 @@ BCOR5mm, % Binding correction
 
 \author{\spacedlowsmallcaps{Thibaut EHLINGER}} % The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
 
-\date{Mercredi 27 novembre 2015} % An optional date to appear under the author(s)
+\date{Vendredi 27 novembre 2015} % An optional date to appear under the author(s)
 
 %----------------------------------------------------------------------------------------
 
@@ -71,12 +71,24 @@ BCOR5mm, % Binding correction
 Ce rapport présente la conception en C d'un utilitaire permettant l'analyse d'un fichier trace d'un réseau fonctionnant pour un certain format de fichier indépendemment de sa taille.
 
 Il y figure aussi quelques pistes concernant les résultats trouvés lors de l'analyse d'un fichier de trafique spécifique fourni par notre encadrant. 
+
+\makeatletter
+\newcommand*{\centerfloat}{%
+  \parindent \z@
+  \leftskip \z@ \@plus 1fil \@minus \textwidth
+  \rightskip\leftskip
+  \parfillskip \z@skip}
+\makeatother
+\begin{figure}
+	\centerfloat
+   \includegraphics[width=15cm]{png/delay.png}
+\end{figure}
 %----------------------------------------------------------------------------------------
 
 \newpage % Start the article content on the second page, remove this if you have a longer abstract that goes onto the second page
 
 %----------------------------------------------------------------------------------------
-%	EXERCICE 1
+%	I. MANUEL
 %----------------------------------------------------------------------------------------
 
 \section{Fonctionnalités implémentées - Manuel d'utilisation}
@@ -108,8 +120,10 @@ compte le nombre de flux donnés dans le fichier.\newline \textbf{\texttt{attent
   \item \textbf{\texttt{N}} (entier) : trace le flux appelé ayant N pour identifiant.
   \item Exemples :\newline\texttt{\$./trace -f trace2650.txt -F all}\newline\texttt{\$./trace -f trace2650.txt -F 2342}
 \end{itemize}
-\subsubsection{\texttt{-p N(entier)}}
+\subsubsection{\texttt{-p all/N(entier)}}
 \begin{itemize}
+\item \textbf{\texttt{all} : }
+	réalise un échantillonnage de l'ensemble des paquets injectés dans le réseau toutes les n secondes.
   \item \textbf{\texttt{N}} (entier) : trace le paquet appelé ayant N pour identifiant.
   \item Exemple :\newline\texttt{\$./trace -f trace2650.txt -p 2342}
 \end{itemize}
@@ -127,11 +141,60 @@ compte le nombre de flux donnés dans le fichier.\newline \textbf{\texttt{attent
   \item Exemple :\newline\texttt{\$./trace -r trace2650.txt -l all}
 \end{itemize}
 
+%----------------------------------------------------------------------------------------
+%	II.MEMOIRE ET ALGORITHMIQUE
+%----------------------------------------------------------------------------------------
 
-\section{Choix de conceptions}
-Le fichier fourni est volumineux puisqu'il pèse plus de 140Mo. De plus, l'utilitaire conçu doit-être conçu pour des fichiers bien plus volumineux que celui-ci, pouvant dépasser le Go. 
+\section{Mémoire et algorithmique}
+Le fichier fourni est volumineux puisqu'il pèse plus de 140Mo. De plus, l'utilitaire compatible avec des fichiers bien plus volumineux que celui-ci, pouvant dépasser le Go. 
 
 Aussi chaque choix de conception influe directement sur la vitesse d'éxécution ainsi que par le volume de mémoire vive monopolisé par celui-ci.
+
+Nous n'allons pas détailler l'ensemble du code fourni, mais simplement commenter les points qui ont nécéssité de faire des choix. Commençons par préciser que le fichier n'est parcouru qu'une seule fois et qu'à part pour la fonctionnalité de comptabilisation de tous les flux, le temps d'exécution est inférieur à 5 secondes.
+
+
+
+\subsection{Statistiques globales et traçage de flux et paquets}
+Il était trivial de comptabiliser les paquets générés et détruits dans l'ensemble du réseau, il suffisait de compter le nombre de code 0 et 4 du fichier.
+Pour comptabiliser le nombre de  flux c'était différent puisque la mort et la naissance d'un flux n'étaient jamais clairement marqués. La seule solution était de répertorier tous les identifiants déjà rencontrés. J'ai commis l'erreur de les stocker simplement dans une liste chaînée croissante sans doublon, ce qui rend le temps d'exécution du programme quadratique : en effet, pour chaque ligne du fichier, on parcourt en moyenne toute la liste des flux déjà répertoriés. Il eût été plus judicieux d'utiliser une hashtable. Je n'ai plus reproduit cette erreur pour les autres fonctionnalités.
+
+Concernant le traçage d'un flux ou d'un paquet, il suffisait là aussi de parcourir une seule fois tout le fichier (sauf pour les paquets où l'on pouvait même s'arrêter après la mort du paquet), et de répertorier toutes les informations dans une structure de données adaptée.
+
+\subsection{Statistiques de circulation intra-routeur}
+Celle-ci est aussi simple puisqu'il suffit de crééer un tableau de la taille du nombre de routeurs (constante dans \texttt{global.h})et d'incrémenter le nombre de destructions et de passage y ayant lieu. Un tableau de deux entiers par routeur faisait l'affaire.
+
+\subsection{Traçage des délais moyens de communications de bout en bout}
+Cette fonctionnalité présentait le plus de défis. Toutes les informations concernant les communications de bout en bout d'un noeud à un autre étaient stockées dans une structure \texttt{links\_charge}. Il est claire que je ne pouvais pas m'y prendre comme je l'avais fait avec les identifiants de flux, puisqu'une liste de listes chaînées aurait immensément accru le temps d'exécution. En effet à chaque réception en un point d'un paquet, il fallait trouver l'évènement correspondant à son émission. Or celui-ci lui étant antérieur, il fallait le stocker. J'ai donc fait deux optimisations :
+\begin{itemize}
+	\item{Les structures \texttt{links\_charge} contenant les informations pertinentes sur les différents liens, étaient stocké dans un tableau de la taille de $ \frac{  N \times (N-1) }{2} $ } éléments. Une fonction \texttt{get\_hash(i,j)} permettant de renvoyer l'indice de l'élément correspondant à la communication entre i et j. Cette fonction de hash se base sur la linéarisation d'une demi-matrice.
+	\item{Il n'est donc pas nécessaire de parcourir tous les \texttt{links\_charge} pour trouver lequel correspond à la ligne du fichier analysé. L'autre optimisation concerne les paquets : une fois qu'on trouve une réception/destruction de paquet, on stocke la durée du voyage puis on supprime le paquet du buffer de paquets dans \texttt{links\_charge}. Ainsi on ne fait que très peu de comparaisons pour trouver où stocker les paquets émis par un noeud.}
+
+\end{itemize}
+%----------------------------------------------------------------------------------------
+%	II.RÉSULTATS ET EXPLOITATION
+%----------------------------------------------------------------------------------------
+
+\section{Résultats et exploitation}
+
+\begin{figure}[top]
+\centering
+\parbox{8cm}{
+\includegraphics[width=8cm]{png/router3.png}
+\caption{Charge des liens également pondérés}
+\label{Fair}}
+\qquad
+\begin{minipage}{8cm}
+\includegraphics[width=8cm]{png/delay.png}
+\caption{Charge des liens avec le lien 1-2 plus couteux}
+\label{Unfair}
+\end{minipage}
+\begin{minipage}{8cm}
+\includegraphics[width=8cm]{png/router20.png}
+\caption{Routage plus équitable}
+\label{Eq}
+\end{minipage}
+\end{figure}
+
 
 
 \end{document}

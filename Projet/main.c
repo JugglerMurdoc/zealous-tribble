@@ -36,7 +36,7 @@ int main (int argc, char* argv[]) {
 	double time_spent;
 	int trace_routers = -2;
 	int trace_packet = -1;
-	char * file_name = NULL;
+	char * file_name;
 	int flow_value = -2;
 	int link_id = -2;
 	int c;
