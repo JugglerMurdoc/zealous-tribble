@@ -26,6 +26,8 @@ static const float PRECISION = 10.0;
 static const char TOTAL_WAITING_PACKETS_FILE[] = "./traces/total_waiting.tr";
 static const char ROUTERS_CHARGE_FILE[] = "./traces/routers_traces.tr";
 static const char ONE_ROUTER_CHARGE_FILE[] = "./traces/trace_router";
+static const char END_TO_END_DELAY_FILE[] = "./traces/trace_delay.tr";
+static const char LINK_CHARGE_FILE[] = "./traces/links_charge.tr";
 
 flow_stats init_flow_stats(int flow_id);
 void print_flow_stats(flow_stats f_stats);

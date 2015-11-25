@@ -35,6 +35,7 @@ global_stats init_stats(int links_flag){
 	stats.end_to_end_charge = (links_charge*)malloc( nb_links * sizeof(links_charge));
 	for(i = 0; i < nb_links; i++){
 		stats.end_to_end_charge[i].diff_p = 0;
+		stats.end_to_end_charge[i].diff_d = 0;
 		stats.end_to_end_charge[i].total_time = 0.0;
 		stats.end_to_end_charge[i].p_list = NULL;
 	}

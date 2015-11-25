@@ -16,8 +16,8 @@ typedef struct global_stats global_stats;
 
 struct Node2 {
 	int id;
-	float begin;
-	float end;
+	double begin;
+	double end;
 	struct Node2 * next;
 };
 
@@ -25,7 +25,8 @@ typedef struct Node2* NODE2;
 
 	struct links_charge {
 	int diff_p;
-	float total_time;
+	int diff_d;
+	double total_time;
 	NODE2 p_list; 	
 };
 
@@ -33,9 +34,9 @@ typedef struct links_charge links_charge;
 
 NODE2  new_p_list(int value,float begin);
 
-NODE2 add_p(links_charge link, int id, float begin);
+NODE2 add_p(links_charge link, int id, double begin);
 
-NODE2 rm_p(links_charge* link, int id, float end);
+NODE2 rm_p(links_charge* link, int id, float end,int is_not_dest);
 
 void print_used_links_stats(global_stats stats);
 
