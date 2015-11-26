@@ -24,8 +24,8 @@ global_stats init_stats(int links_flag){
 	stats.flow_ids_list = new_list(-1);
 	stats.routers = (int**)malloc(ROUTERS_NB*sizeof(int*));
 	for(i = 0; i < ROUTERS_NB; i++){
-		stats.routers[i] = (int*) malloc (2 * sizeof(int));
-		for(j = 0; j < 2; j++){	
+		stats.routers[i] = (int*) malloc (3 * sizeof(int));
+		for(j = 0; j < 3; j++){	
 		stats.routers[i][j] = 0;
 		}
 	}
@@ -71,8 +71,11 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
 		 trace_line ex_line;
          ex_line = extract_line(line);
          
-         trace_total_waiting_packets(ex_line,total_waiting_file,total_destroyed_file);	         
+        if(link_id != -1){
+         trace_total_waiting_packets(ex_line,total_waiting_file,total_destroyed_file);	 
+	         
          trace_global_stats(ex_line, &stats);
+	 }
 	 if(flow_id == -1){
 		trace_total_flows_amount(ex_line, &stats);
 	 }
@@ -98,7 +101,7 @@ global_stats run_through(FILE* file,int flow_id,int trace_routers_flag, int pack
          i++;
          if(i % ((int)step_size) == 0){
 			 			 float progress = ((float)i)/((float)NB_LINES)*100.0;
-			 			 printf("\n%0.0f%% ...",progress);
+			 			 printf("%0.0f%% ...\n",progress);
 		 }
     
     }
@@ -121,21 +124,31 @@ void read_file(char * file_name,int flow_id,int trace_routers_flag,int packet_id
 	printf("ERROR : couldn't open file : %s\n", file_name);
 	}
   else{
+	    int i;
 		stats = run_through(file,flow_id,trace_routers_flag,packet_id,link_id);
 		printf("Destructions lues       : %-7d\n",stats.destr_p);
 		printf("Paquets differents lus : %-7d\n",stats.diff_p);
 		if(flow_id == -1){printf("FLUX DIFFERENTS : %-7d\n",stats.diff_f);
 							}
 		
-		if(trace_routers_flag == -1){
-			print_routeurs_charge(stats.routers);
-			system("gnuplot < plot/routers_charge.gp && mv routers.png ./png && display ./png/routers.png ");
-		}
-		else{
-		}
 		if(link_id == -1){
 			write_end_to_end_charge(stats);
 		}
+		if(trace_routers_flag == -1){
+			int destr = 0;
+			for(i = 0; i < ROUTERS_NB; i++){
+				destr += stats.routers[i][1];
+				printf("\nROUTEUR %d : \n",i);
+				printf("Passages     : %-5d\n",stats.routers[i][2]);
+				printf("Destructions : %-5d\n",stats.routers[i][1]);
+				printf("Receptions   : %-5d\n",stats.routers[i][0]);
+				
+			}
+							print_routeurs_charge(stats.routers);
+			system("gnuplot < plot/routers_charge.gp && mv routers.png ./png && display ./png/routers.png ");
+			
+		}
+		
 		
 		remove_list(stats.flow_ids_list);
 		printf("\n");

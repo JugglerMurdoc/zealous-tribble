@@ -174,12 +174,43 @@ Cette fonctionnalité présentait le plus de défis. Toutes les informations con
 %	II.RÉSULTATS ET EXPLOITATION
 %----------------------------------------------------------------------------------------
 
+\newpage
 \section{Résultats et exploitation}
+Les données collectées concernent trois aspects du réseau :
+\begin{itemize}
+\item{Ses données globales}
+\item{Les données concernant les routeurs (et non les liens)}
+\item{Les données concernant les communications de bout en bout}
+\end{itemize}
+
+\subsection{Données globales}
+L'exécutable indique que durant les 20 secondes d'exécution, \textbf{750 979} ont été émis dans le réseau, dont \textbf{35 164} ont été détruits. De plus la figure \ref{total_packets} nous montre la répartition de ces émissions au fil du temps. On constate que l'émission des paquets augmente plutôt linéairement au cours du temps, puis qu'elle s'écroule complètement aux alentours de la $11^{eme} $ seconde, formant une gigantesque dent de scie.
+
+De cela on peut d'ores et déjà déduire une chose : ce réseau n'est pas un réseau uniforme régit par des \textit{Constant Bit Rates} avec des liens et des files de routeurs surdimensionnées. En effet une telle topologie peut signifier plusieurs choses : 
+\begin{itemize}
+\item{soit d'une \textbf{congestion} d'un routeur du réseau, qui serait détectée par les émetteurs et qui arrêteraient alors d'émettre.}
+\item{soit d'une syncronisation de tous les émetteurs. Peut-être parce qu'ils émettent tous en fonction d'un même algorithme TCP synchronisé par exemple.}
+\item{soit d'un trafique généré par une loi "en dent de scie". On en observerait alors simplement une dent dans son intégralité, ce qui serait pertinent comme trace de réseau.}
+La figure \ref{destr_cumul.png} nous permet néanmoins d'avancer sur la question.
+\end{itemize}
+\begin{figure}
+	\centerfloat
+    \includegraphics[width=19cm]{png/total_packets.png}
+	\caption{Echantillonnage du nombre de paquets émis toutes les 100ms}
+   \label{total_packets}
+\end{figure}
+\newpage
+\begin{figure}
+	\centerfloat
+    \includegraphics[width=19cm]{png/destr_cumul.png}
+	\caption{Echantillonnage du nombre de paquets émis toutes les 100ms}
+   \label{total_destroys}
+\end{figure}
 
 \begin{figure}[top]
 \centering
 \parbox{8cm}{
-\includegraphics[width=8cm]{png/router3.png}
+\includegraphics[width=8cm]{png/routers/router3.png}
 \caption{Charge des liens également pondérés}
 \label{Fair}}
 \qquad
@@ -189,7 +220,7 @@ Cette fonctionnalité présentait le plus de défis. Toutes les informations con
 \label{Unfair}
 \end{minipage}
 \begin{minipage}{8cm}
-\includegraphics[width=8cm]{png/router20.png}
+\includegraphics[width=8cm]{png/routers/router20.png}
 \caption{Routage plus équitable}
 \label{Eq}
 \end{minipage}

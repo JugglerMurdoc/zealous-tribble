@@ -10,10 +10,10 @@
 #include "trace_ids.h"
 #include "links_tracer.h"
 
-#define SAMPLE 100000
-#define ROUTERS_NB 26
+#define SAMPLE 100
 #define NB_LINES 3502252
 #define STEP_SIZE_PERCENT 5
+
 
 typedef struct Node* NODE;
 

@@ -14,6 +14,8 @@ typedef struct trace_line trace_line;
 
 typedef struct global_stats global_stats;
 
+extern int ROUTERS_NB;
+
 struct Node2 {
 	int id;
 	double begin;

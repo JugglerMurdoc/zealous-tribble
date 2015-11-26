@@ -42,13 +42,9 @@ void trace_total_waiting_packets(trace_line line, FILE* total_waiting_file,FILE*
 					}
 				 else{
 					 
-				  current_queue_size--;
 				 }
 				 }
 			 }else{
-			if(new_time == 2.0){
-				printf("yo\n");
-			}
 			 char buffer [50];
 			 char buffer2 [50];
 			 int test = (current_queue_size > 0)?current_queue_size:0;
@@ -66,16 +62,20 @@ void trace_total_waiting_packets(trace_line line, FILE* total_waiting_file,FILE*
 void trace_routers_charge(trace_line line,global_stats* stats,int trace_routers_flag,FILE* router_file){
 	 if(trace_routers_flag != -2){		
 		if(trace_routers_flag == -1){	
-			
-			if(line.p_type == ARR_INT/* || line.p_type == ARR_DEST*/){
-					int result = stats->routers[line.n_src-1][0] + 1;
-					stats->routers[line.n_src-1][0] = result;		}
+		/*Trace de la charge de TOUS les routeurs*/			
+			if(line.p_type == ARR_INT){
+					int result = stats->routers[line.n_pos-1][0] + 1;
+					stats->routers[line.n_pos-1][0] = result;		}
 			if(line.p_type == DEST){
-					int result = stats->routers[line.n_src-1][1] + 1;
-					stats->routers[line.n_src-1][1] = result;		}
-			}else{
-		/*Trace de la charge de TOUS les routeurs*/
-			if((line.p_type == ARR_INT || line.p_type == ARR_DEST) && line.n_src == trace_routers_flag) {
+					int result = stats->routers[line.n_pos-1][1] + 1;
+					stats->routers[line.n_pos-1][1] = result;		}
+			}
+			if(line.p_type == ARR_DEST){
+					int result = stats->routers[line.n_src-1][2] + 1;
+					stats->routers[line.n_src-1][2] = result;		}
+			
+			else{
+			if((line.p_type == ARR_INT || line.p_type == ARR_DEST) && line.n_pos == trace_routers_flag) {
 				 	static float time_before = 0;
 					static int current_queue_size = 0;
 					float new_time = truncate(line.time);
@@ -90,15 +90,16 @@ void trace_routers_charge(trace_line line,global_stats* stats,int trace_routers_
 						{
 						 char buffer [50];
 						 sprintf(buffer,"%f %d\n", new_time, current_queue_size);
+						 printf("%s\n",buffer);
 						 fputs(buffer,router_file);
 						 current_queue_size = 0;
 						 time_before = new_time;
 					}
 			}			
 			}
-	}
+	}}
 }
-}
+
 
 
 /*{DEP_SOURCE, ARR_INT, DEP_FILE, ARR_DEST, DEST}*/
@@ -195,4 +196,23 @@ void trace_flow(trace_line line, flow_stats* stats){
 		}
 		
 	}
+}
+
+int count_routers(char * file_name){
+	char buf[1024];
+	 FILE* file = fopen(file_name, "r");
+	 int result = 0;
+	 
+	 
+	 while(fgets(buf, sizeof(buf), file) != NULL){
+		result++; 
+	 }	
+	 
+	 if(result == 1){
+		 return -1;
+	 }
+	 else{
+		 return result;
+	 }
+	 
 }

@@ -8,6 +8,7 @@
 
 typedef enum {DEP_SOURCE, ARR_INT, DEP_FILE, ARR_DEST, DEST} packet_type;
 
+
 struct trace_line {
 	float time;
 	packet_type p_type;

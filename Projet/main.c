@@ -6,16 +6,19 @@
 #include "trace_ids.h"
 #include "links_tracer.h"
 
+int ROUTERS_NB = -1;
+
 void print_help(){
-		printf("\n\n\nOptions :\n\n\
--f                   : the name of the file to parse\n\
--h                   : get help! \
-\n\
+		printf("\n-Options :\n\n\
 -F <flow_id>/'all'   : traces the given \
 flow id or, if the option 'all' is used, traces the NUMBER of different \
 flows\
+-f <file name>       : the name of the file to parse\n\
+-h                   : get help! \
 \n\
 -l 'all'             : traces all the end to end communications of the traces. \
+\n\
+-m <matrix name>     : the name of the file to containing the matrice\
 \n\
 -h                   : get help!\
 \n\
@@ -26,7 +29,10 @@ packets\
 -r <router_id>/'all' : traces the given \
 router or, if the option 'all' is used, traces the NUMBER of total packets \
 transiting through each router.\
-\n\n\n");
+\n\n\
+-Exemple :\n\
+\n./read -f trace2650.txt -m res26.txt  -r all\
+\n\n");
 			 }
 
 
@@ -40,12 +46,14 @@ int main (int argc, char* argv[]) {
 	int flow_value = -2;
 	int link_id = -2;
 	int c;
+	int routers = -1;
 	
 	opterr = 0;
 
-	while ((c = getopt (argc, argv, "F:f:hsr:p:l:")) != -1)
+	while ((c = getopt (argc, argv, "F:f:hsr:p:l:m:")) != -1)
     switch (c)
       {
+		  
 	  case 'l':
 			if(strcmp(optarg,"all") == 0){
 				link_id = -1;
@@ -61,6 +69,10 @@ int main (int argc, char* argv[]) {
        case 'f':
 			printf("filename : %s\n",optarg);
 			file_name = optarg;
+			break;
+	   case 'm':
+			printf("matrix : %s\n",optarg);
+			ROUTERS_NB = count_routers(optarg);
 			break;
 	   case 'p':
 			trace_packet = atoi(optarg);
@@ -91,8 +103,11 @@ int main (int argc, char* argv[]) {
 		default:
 			abort ();
       }
-
 	
+	if(ROUTERS_NB == -1){
+		printf("ERREUR : Prière d'indiquer la matrice d'adjacence (option -m)\n");
+		return 0;
+	}
 	begin = clock();
 	read_file(file_name,flow_value,trace_routers, trace_packet,link_id);
 	

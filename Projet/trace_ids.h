@@ -8,7 +8,6 @@
 #include "trace_line.h"
 
 
-
 typedef struct global_stats global_stats;
 
 struct Node {
