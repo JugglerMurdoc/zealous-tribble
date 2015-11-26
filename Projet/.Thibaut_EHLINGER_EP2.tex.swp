@@ -184,28 +184,33 @@ Les données collectées concernent trois aspects du réseau :
 \end{itemize}
 
 \subsection{Données globales}
-L'exécutable indique que durant les 20 secondes d'exécution, \textbf{750 979} ont été émis dans le réseau, dont \textbf{35 164} ont été détruits. De plus la figure \ref{total_packets} nous montre la répartition de ces émissions au fil du temps. On constate que l'émission des paquets augmente plutôt linéairement au cours du temps, puis qu'elle s'écroule complètement aux alentours de la $11^{eme} $ seconde, formant une gigantesque dent de scie.
-
-De cela on peut d'ores et déjà déduire une chose : ce réseau n'est pas un réseau uniforme régit par des \textit{Constant Bit Rates} avec des liens et des files de routeurs surdimensionnées. En effet une telle topologie peut signifier plusieurs choses : 
-\begin{itemize}
-\item{soit d'une \textbf{congestion} d'un routeur du réseau, qui serait détectée par les émetteurs et qui arrêteraient alors d'émettre.}
-\item{soit d'une syncronisation de tous les émetteurs. Peut-être parce qu'ils émettent tous en fonction d'un même algorithme TCP synchronisé par exemple.}
-\item{soit d'un trafique généré par une loi "en dent de scie". On en observerait alors simplement une dent dans son intégralité, ce qui serait pertinent comme trace de réseau.}
-La figure \ref{destr_cumul.png} nous permet néanmoins d'avancer sur la question.
-\end{itemize}
 \begin{figure}
 	\centerfloat
     \includegraphics[width=19cm]{png/total_packets.png}
 	\caption{Echantillonnage du nombre de paquets émis toutes les 100ms}
    \label{total_packets}
 \end{figure}
-\newpage
+L'exécutable indique que durant les 20 secondes d'exécution, \textbf{750 979} ont été émis dans le réseau, dont \textbf{35 164} ont été détruits. De plus la figure \ref{total_packets} nous montre la répartition de ces émissions au fil du temps. On constate que l'émission des paquets augmente plutôt linéairement au cours du temps, puis qu'elle s'écroule complètement aux alentours de la $11^{eme} $ seconde, formant une gigantesque dent de scie.
+
+De cela on peut d'ores et déjà déduire une chose : ce réseau n'est pas un réseau uniforme régit par des \textit{Constant Bit Rates} avec des liens et des files de routeurs surdimensionnées. En effet une telle topologie peut signifier plusieurs choses : 
 \begin{figure}
 	\centerfloat
     \includegraphics[width=19cm]{png/destr_cumul.png}
-	\caption{Echantillonnage du nombre de paquets émis toutes les 100ms}
+	\caption{Echantillonnage du cumul des destructions au cours du temps superposé à la courbe de la Figure \ref{total_packets}}
    \label{total_destroys}
 \end{figure}
+\begin{itemize}
+\item{soit d'une \textbf{congestion} d'un routeur du réseau, qui serait détectée par les émetteurs et qui arrêteraient alors d'émettre.}
+\item{soit d'une syncronisation de tous les émetteurs. Peut-être parce qu'ils émettent tous en fonction d'un même algorithme TCP synchronisé par exemple.}
+\item{soit d'un trafic généré par une loi "en dent de scie". On en observerait alors simplement une dent dans son intégralité, ce qui serait pertinent comme trace de réseau.}
+\end{itemize}
+
+La figure \ref{total_destroys} nous permet néanmoins d'avancer sur la question. En effet on constate qu'à partit de la sixième seconde et jusqu'à la onzième, le nombre de destructions cumulé passe de moins de 5 000 à plus de 35 000 (soit multiplié par sept environ!), puis il stagne.
+On peut comprendre que quelque chose se passe sur le réseau. S'il y a destruction, cela signifie qu'un routeur au moins reçoit plus de paquets que ce qu'il pourrait en supporter. La mission consistera donc à déceler le potentiel coupable.
+
+
+
+\newpage
 
 \begin{figure}[top]
 \centering
