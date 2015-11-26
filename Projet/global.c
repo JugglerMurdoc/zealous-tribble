@@ -8,7 +8,7 @@ void print_routeurs_charge(int** routeurs)
 			int i;
 			for( i = 0; i < ROUTERS_NB; i++){
 				char buffer [50];
-				sprintf(buffer,"%d %d %d\n", i, routeurs[i][0],routeurs[i][1]);
+				sprintf(buffer,"%d %d %d\n", i, routeurs[i][2],routeurs[i][1]);
 				fputs(buffer,routeurs_file);
 			}
 			fclose(routeurs_file);

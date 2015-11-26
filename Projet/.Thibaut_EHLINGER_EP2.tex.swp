@@ -207,29 +207,36 @@ De cela on peut d'ores et déjà déduire une chose : ce réseau n'est pas un r�
 
 La figure \ref{total_destroys} nous permet néanmoins d'avancer sur la question. En effet on constate qu'à partit de la sixième seconde et jusqu'à la onzième, le nombre de destructions cumulé passe de moins de 5 000 à plus de 35 000 (soit multiplié par sept environ!), puis il stagne.
 On peut comprendre que quelque chose se passe sur le réseau. S'il y a destruction, cela signifie qu'un routeur au moins reçoit plus de paquets que ce qu'il pourrait en supporter. La mission consistera donc à déceler le potentiel coupable.
+\newpage
+\subsection{Données des noeuds du réseau}
 
+\begin{figure}
+	\centerfloat
+    \includegraphics[width=19cm]{png/routers.png}
+	\caption{Diagramme du nombre de paquets en transit (et non reçus) dans chacun des routeurs du réseau}
+   \label{routers_charge}
+\end{figure}
+
+La réponse au problème paraît évidente dans la figure \ref{routers_charge} : le routeur numéro 3 voit passer 213 889 paquets à lui seul, et en reçoit 419 524.
+En tapant la commande :
+
+
+
+\begin{figure}
+\centerfloat
+\subfloat[Routeur 1]{\includegraphics[width = 9cm]{png/routers/router2.png}} 
+\subfloat[Routeur 3]{\includegraphics[width = 11cm]{png/routers/router4.png}}\   
+\subfloat[Routeur 6]{\includegraphics[width = 9cm]{png/routers/router6.png}}
+\subfloat[Routeur 8]{\includegraphics[width = 9cm]{png/routers/router8.png}} 
+\caption{Add your own figures before compiling}
+\label{some example}
+\end{figure}
+\texttt{./read -f trace2650.txt -m res26.txt -r all}
+\newline On voit qu'il est à lui seul responsable de 16 878 destructions, soit environ la \textbf{moitié} des destructions répertoriées dans le réseau!
+Ce graphique témoigne donc d'une grande disparité dans la charge des différents routeurs du réseau. Les figueres suivantes précisent cette inégalité alarmante : les routeurs 1,6 et 8 plaffonne à un traffic de 350 paquets par 100ms tandis que le routeur 3 en reçoit jusqu'à 4 000!
 
 
 \newpage
-
-\begin{figure}[top]
-\centering
-\parbox{8cm}{
-\includegraphics[width=8cm]{png/routers/router3.png}
-\caption{Charge des liens également pondérés}
-\label{Fair}}
-\qquad
-\begin{minipage}{8cm}
-\includegraphics[width=8cm]{png/delay.png}
-\caption{Charge des liens avec le lien 1-2 plus couteux}
-\label{Unfair}
-\end{minipage}
-\begin{minipage}{8cm}
-\includegraphics[width=8cm]{png/routers/router20.png}
-\caption{Routage plus équitable}
-\label{Eq}
-\end{minipage}
-\end{figure}
 
 
 

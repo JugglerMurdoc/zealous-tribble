@@ -75,7 +75,7 @@ void trace_routers_charge(trace_line line,global_stats* stats,int trace_routers_
 					stats->routers[line.n_src-1][2] = result;		}
 			
 			else{
-			if((line.p_type == ARR_INT || line.p_type == ARR_DEST) && line.n_pos == trace_routers_flag) {
+			if((line.p_type == DEP_SOURCE) && line.n_pos == trace_routers_flag) {
 				 	static float time_before = 0;
 					static int current_queue_size = 0;
 					float new_time = truncate(line.time);
@@ -90,7 +90,6 @@ void trace_routers_charge(trace_line line,global_stats* stats,int trace_routers_
 						{
 						 char buffer [50];
 						 sprintf(buffer,"%f %d\n", new_time, current_queue_size);
-						 printf("%s\n",buffer);
 						 fputs(buffer,router_file);
 						 current_queue_size = 0;
 						 time_before = new_time;
