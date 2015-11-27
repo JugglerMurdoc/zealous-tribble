@@ -73,7 +73,9 @@ void trace_routers_charge(trace_line line,global_stats* stats,int trace_routers_
 			if(line.p_type == ARR_DEST){
 					int result = stats->routers[line.n_src-1][2] + 1;
 					stats->routers[line.n_src-1][2] = result;		}
-			
+			if(line.p_type == DEP_SOURCE){
+					int result = stats->routers[line.n_src-1][3] + 1;
+					stats->routers[line.n_src-1][3] = result;		}
 			else{
 			if((line.p_type == DEP_SOURCE) && line.n_pos == trace_routers_flag) {
 				 	static float time_before = 0;

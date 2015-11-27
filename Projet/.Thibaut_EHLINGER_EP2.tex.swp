@@ -228,8 +228,8 @@ En tapant la commande :
 \subfloat[Routeur 3]{\includegraphics[width = 11cm]{png/routers/router4.png}}\   
 \subfloat[Routeur 6]{\includegraphics[width = 9cm]{png/routers/router6.png}}
 \subfloat[Routeur 8]{\includegraphics[width = 9cm]{png/routers/router8.png}} 
-\caption{Add your own figures before compiling}
-\label{some example}
+\caption{Nombre de paquets transitant par les routeurs 1,3,6 et 8.}
+\label{transit}
 \end{figure}
 \texttt{./read -f trace2650.txt -m res26.txt -r all}
 \newline On voit qu'il est à lui seul responsable de 16 878 destructions, soit environ la \textbf{moitié} des destructions répertoriées dans le réseau!
